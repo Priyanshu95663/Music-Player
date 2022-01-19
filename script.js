@@ -11,6 +11,107 @@ const wrapper = document.querySelector(".wrapper"),
     musicList = wrapper.querySelector(".music-list"),
     moreMusicBtn = wrapper.querySelector("#more-music"),
     closemoreMusic = musicList.querySelector("#close");
+    let galaxy=false;
+
+
+const canvas = document.querySelector('canvas')
+const c = canvas.getContext('2d')
+
+canvas.width = innerWidth
+canvas.height = innerHeight
+
+const mouse = {
+    x: innerWidth / 2,
+    y: innerHeight / 2
+}
+
+const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66']
+
+addEventListener('resize', () => {
+    canvas.width = innerWidth
+    canvas.height = innerHeight
+
+    init()
+})
+
+// Objects
+class Particle {
+    constructor(x, y, radius, color) {
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+    }
+
+    draw() {
+        c.beginPath()
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        c.shadowColor=this.color
+        c.shadowBlur=15;
+        c.fillStyle = this.color
+        c.fill()
+        c.closePath()
+    }
+
+    update() {
+        this.draw()
+    }
+}
+
+// Implementation
+let particles
+function init() {
+    particles = []
+
+    for (let i = 0; i < 1000; i++) {
+        const canvasWidth=canvas.width+300;
+        const canvasHeight=canvas.height+300;
+
+        const x=Math.random()*canvasWidth-canvasWidth/2;
+        const y=Math.random()*canvasHeight-canvasHeight/2;
+        const radius=Math.random()*2;
+        const color=colors[Math.floor(Math.random()*4)]
+
+        particles.push(new Particle(x,y,radius,color));
+    }
+    console.log(particles)
+}
+
+// Animation Loop
+let radians=0;
+let alpha=1
+function animate() {
+    requestAnimationFrame(animate)
+    c.fillStyle=`rgba(10,10,10, ${alpha})`
+    c.fillRect(0, 0, canvas.width, canvas.height)
+
+    //c.fillText('HTML CANVAS BOILERPLATE', mouse.x, mouse.y)
+
+
+    c.save()
+    c.translate(canvas.width/2,canvas.height/2)
+    c.rotate(radians)
+    particles.forEach((particle) => {
+        particle.update()
+    })
+
+    c.restore();
+
+    radians+=0.005;
+
+    if(galaxy && alpha>=0.1)
+    {
+        alpha-=0.01;
+    }
+    else if(!galaxy && alpha<1)
+    {
+        alpha+=0.01
+    }
+}
+
+init()
+animate()
+
 
 let musicIndex = Math.floor((Math.random() * allMusic.length) + 1);
 isMusicPaused = true;
@@ -27,21 +128,23 @@ function loadMusic(indexNumb){
     mainAudio.src = `songs/${allMusic[indexNumb - 1].src}.mp3`;
 }
 
-//play music function
+//function to play music
 function playMusic(){
     wrapper.classList.add("paused");
     playPauseBtn.querySelector("i").innerText = "pause";
     mainAudio.play();
+    galaxy=true;
 }
 
-//pause music function
+//function to pause music
 function pauseMusic(){
     wrapper.classList.remove("paused");
     playPauseBtn.querySelector("i").innerText = "play_arrow";
     mainAudio.pause();
+    galaxy=false;
 }
 
-//prev music function
+// function for previous music
 function prevMusic(){
     musicIndex--; //decrement of musicIndex by 1
     //if musicIndex is less than 1 then musicIndex will be the array length so the last music play
@@ -51,7 +154,7 @@ function prevMusic(){
     playingSong();
 }
 
-//next music function
+//function to play next music
 function nextMusic(){
     musicIndex++; //increment of musicIndex by 1
     //if musicIndex is greater than array length then musicIndex will be 1 so the first music play
@@ -61,7 +164,7 @@ function nextMusic(){
     playingSong();
 }
 
-// play or pause button event
+// play or pause button
 playPauseBtn.addEventListener("click", ()=>{
     const isMusicPlay = wrapper.classList.contains("paused");
     //if isPlayMusic is true then call pauseMusic else call playMusic
@@ -69,17 +172,17 @@ playPauseBtn.addEventListener("click", ()=>{
     playingSong();
 });
 
-//prev music button event
+//prev music button
 prevBtn.addEventListener("click", ()=>{
     prevMusic();
 });
 
-//next music button event
+//next music button
 nextBtn.addEventListener("click", ()=>{
     nextMusic();
 });
 
-// update progress bar width according to music current time
+// update progress bar width
 mainAudio.addEventListener("timeupdate", (e)=>{
     const currentTime = e.target.currentTime; //getting playing song currentTime
     const duration = e.target.duration; //getting playing song total duration
@@ -107,7 +210,7 @@ mainAudio.addEventListener("timeupdate", (e)=>{
     musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
 });
 
-// update playing song currentTime on according to the progress bar width
+// update playing song currentTime
 progressArea.addEventListener("click", (e)=>{
     let progressWidth = progressArea.clientWidth; //getting width of progress bar
     let clickedOffsetX = e.offsetX; //getting offset x value
@@ -118,7 +221,7 @@ progressArea.addEventListener("click", (e)=>{
     playingSong();
 });
 
-//change loop, shuffle, repeat icon onclick
+//change loop, shuffle, repeat
 const repeatBtn = wrapper.querySelector("#repeat-plist");
 repeatBtn.addEventListener("click", ()=>{
     let getText = repeatBtn.innerText; //getting this tag innerText
@@ -138,7 +241,7 @@ repeatBtn.addEventListener("click", ()=>{
     }
 });
 
-//code for what to do after song ended
+//after ending of one song
 mainAudio.addEventListener("ended", ()=>{
     // we'll do according to the icon means if user has set icon to
     // loop song then we'll repeat the current song and will do accordingly
@@ -165,7 +268,7 @@ mainAudio.addEventListener("ended", ()=>{
     }
 });
 
-//show music list onclick of music icon
+//show music list
 moreMusicBtn.addEventListener("click", ()=>{
     musicList.classList.toggle("show");
 });
@@ -201,7 +304,7 @@ for (let i = 0; i < allMusic.length; i++) {
     });
 }
 
-//play particular song from the list onclick of li tag
+//play particular song from the music-list
 function playingSong(){
     const allLiTag = ulTag.querySelectorAll("li");
 
@@ -224,7 +327,6 @@ function playingSong(){
     }
 }
 
-//particular li clicked function
 function clicked(element){
     let getLiIndex = element.getAttribute("li-index");
     musicIndex = getLiIndex; //updating current song index with clicked li index
