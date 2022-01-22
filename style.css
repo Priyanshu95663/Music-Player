@@ -234,6 +234,7 @@ body{
     margin: 10px 0;
     max-height: 260px;
     overflow: auto;
+    color:#d4caf5;
 }
 .music-list ul::-webkit-scrollbar{
     width: 0px;
@@ -244,7 +245,7 @@ body{
     cursor: pointer;
     padding-bottom: 10px;
     margin-bottom: 5px;
-    color: whitesmoke;
+    color:#d4caf5;
     border-bottom: 1px solid #E5E5E5;
 }
 .music-list ul li:last-child{
@@ -261,5 +262,5 @@ ul li .audio-duration{
 }
 ul li.playing{
     pointer-events: none;
-    color: var(--white);
+    color: grey;
 }
