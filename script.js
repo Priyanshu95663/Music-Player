@@ -18,7 +18,7 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = innerWidth
-canvas.height = innerWidth
+canvas.height = innerHeight
 
 const mouse = {
     x: innerWidth / 2,
