@@ -14,11 +14,12 @@ const wrapper = document.querySelector(".wrapper"),
     let galaxy=false;
 
 
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = innerWidth
-canvas.height = innerHeight
+canvas.height = outerHeight+ 670
 
 const mouse = {
     x: innerWidth / 2,
@@ -63,9 +64,9 @@ let particles
 function init() {
     particles = []
 
-    for (let i = 0; i < 1000; i++) {
-        const canvasWidth=canvas.width+300;
-        const canvasHeight=canvas.height+300;
+    for (let i = 0; i < 2000; i++) {
+        const canvasWidth=canvas.width+900;
+        const canvasHeight=canvas.height+900;
 
         const x=Math.random()*canvasWidth-canvasWidth/2;
         const y=Math.random()*canvasHeight-canvasHeight/2;
@@ -303,7 +304,6 @@ for (let i = 0; i < allMusic.length; i++) {
         liAudioDuartionTag.setAttribute("t-duration", `${totalMin}:${totalSec}`); //adding t-duration attribute with total duration value
     });
 }
-
 //play particular song from the music-list
 function playingSong(){
     const allLiTag = ulTag.querySelectorAll("li");
