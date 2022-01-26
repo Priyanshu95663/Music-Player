@@ -19,7 +19,7 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 canvas.width = innerWidth
-canvas.height = outerHeight+ 670
+canvas.height = innerHeight+670;
 
 const mouse = {
     x: innerWidth / 2,
@@ -30,7 +30,7 @@ const colors = ['#2185C5', '#7ECEFD', '#FFF6E5', '#FF7F66']
 
 addEventListener('resize', () => {
     canvas.width = innerWidth
-    canvas.height = innerHeight
+    canvas.height = innerHeight +670
 
     init()
 })
